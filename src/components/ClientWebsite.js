@@ -7,6 +7,7 @@ function ClientWebsite({ website }) {
 	const [websiteSubscription, setWebsiteSubscription] = useState(null);
 	const [activeSubscription, setActiveSubscription] = useState(false);
 	const [websiteStatus, setWebsiteStatus] = useState(1);
+	const [websitePublishedDate, setWebsitePublishedDate] = useState(null);
 	const [diseñoColor, setDiseñoColor] = useState('gray');
 	const [desarrolloColor, setDesarrolloColor] = useState('gray');
 	const [publicadoColor, setPublicadoColor] = useState('gray');
@@ -14,7 +15,8 @@ function ClientWebsite({ website }) {
 	const [loadingSubscriptionButton, setLoadingSubscriptionButton] =
 		useState(false);
 
-	const { payWebsite, getWebsiteSubscription } = useWebsitesStore();
+	const { payWebsite, getWebsiteSubscription, cancelWebsiteSubscription } =
+		useWebsitesStore();
 	const { fetchData, fetchError } = useFetch();
 
 	useEffect(() => {
@@ -25,6 +27,7 @@ function ClientWebsite({ website }) {
 		const status = parseInt(website.website_status.split('-')[1]);
 		setWebsiteStatus(status);
 		calcColors(status);
+		formatPublishedDate();
 	}, [website]);
 
 	async function getThisWebsiteSubscription() {
@@ -38,6 +41,28 @@ function ClientWebsite({ website }) {
 		setActiveSubscription(
 			website_subscription?.subscripcion_activa ?? false,
 		);
+	}
+
+	function formatPublishedDate() {
+		const fechaISO = website.publishedAt;
+
+		// Crear un objeto Date a partir de la cadena ISO
+		const fecha = new Date(fechaISO);
+
+		// Opciones de formato
+		const opciones = {
+			day: 'numeric', // Día sin ceros iniciales
+			month: 'long', // Nombre completo del mes
+			year: 'numeric', // Año completo (4 dígitos)
+		};
+
+		// Crear formateador con idioma español
+		const fechaFormateada = new Intl.DateTimeFormat(
+			'es-ES',
+			opciones,
+		).format(fecha);
+
+		setWebsitePublishedDate(fechaFormateada);
 	}
 
 	function calcColors(status) {
@@ -65,7 +90,12 @@ function ClientWebsite({ website }) {
 				<h4 className="font-semibold text-3xl">{website.name}</h4>
 				<Globe size={20} className="opacity-50" />
 			</div>
-			<h3 className="font-normal text-base text-indigo-400 mb-5">
+			<h3
+				onClick={() => {
+					window.open('https://' + website.url, '_blank');
+				}}
+				className="font-normal text-base text-indigo-400 mb-5 cursor-pointer"
+			>
 				{website.url}
 			</h3>
 
@@ -178,7 +208,7 @@ function ClientWebsite({ website }) {
 								? 'Activa la subscripción para publicar tu sitio automáticamentea.'
 								: 'La publicación de tu sitio web se hará automáticamente.'}
 						</p>
-						{!activeSubscription && (
+						{!activeSubscription && websiteSubscription?.id ? (
 							<button
 								onClick={async () => {
 									setLoadingSubscriptionButton(true);
@@ -205,6 +235,13 @@ function ClientWebsite({ website }) {
 								Subscribirme
 								<MoveRight color="#ffffff" size={22} />
 							</button>
+						) : (
+							!websiteSubscription?.id && (
+								<p className="font-semibold text-red-400 ">
+									* Hay un error con la subscripción, manda un
+									WhatsApp al (618) 364 1448
+								</p>
+							)
 						)}
 					</div>
 
@@ -273,24 +310,76 @@ function ClientWebsite({ website }) {
 							Necesitas atención con tu sitio, ¡contáctame!
 						</p>
 						<div className="flex items-center gap-5 mb-10">
-							<button className="mt-2 flex items-center justify-center gap-3 px-10 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+							<a
+								href="tel:(618) 364 1448"
+								className="mt-2 flex items-center justify-center gap-3 px-10 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+							>
 								{/* <Phone color="#ffffff" size={15} /> */}
 								(618) 364 1448
-							</button>
-							<button className="mt-2 flex items-center justify-center gap-3 px-10 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+							</a>
+							<a
+								href="mailto:leogjli66@gmail.com"
+								className="mt-2 flex items-center justify-center gap-3 px-10 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+							>
 								{/* <Mail color="#ffffff" size={15} /> */}
 								leogjli66@gmail.com
-							</button>
+							</a>
 						</div>
-						<div className="flex items-center gap-3 mb-1">
-							<p className="text-sm font-medium">
-								Sitio publicado desde el 20 de diciembre de
-								2023.
-							</p>
-							<button className="p-0 text-red-400 text-sm underline bg-transparent cursor-pointer font-medium">
-								Cancelar subscripción
-							</button>
-						</div>
+						{activeSubscription ? (
+							<div className="flex items-center gap-3 mb-1">
+								<p className="text-sm font-medium">
+									Sitio publicado desde el{' '}
+									{websitePublishedDate ?? '...'}.
+								</p>
+								<button
+									onClick={() => {
+										cancelWebsiteSubscription({
+											fetchData,
+											fetchError,
+											website_subscription_id:
+												websiteSubscription.stripe_subscription_id,
+											strapi_subscription_Id:
+												websiteSubscription.id,
+										});
+									}}
+									className="p-0 text-red-400 text-sm underline bg-transparent cursor-pointer font-medium"
+								>
+									Cancelar subscripción
+								</button>
+							</div>
+						) : (
+							<div className="flex items-center flex-col gap-0 mb-3">
+								<p className="text-sm font-medium">
+									Sitio no publicado por falta de pago.
+								</p>
+								<button
+									onClick={async () => {
+										setLoadingSubscriptionButton(true);
+										await payWebsite({
+											fetchData,
+											fetchError,
+											website_subscription_id:
+												websiteSubscription?.id,
+											website_price:
+												website?.precio_stripe?.split(
+													'-',
+												)[1],
+										});
+										setLoadingSubscriptionButton(false);
+									}}
+									disabled={loadingSubscriptionButton}
+									className={
+										(loadingSubscriptionButton
+											? 'opacity-50 '
+											: 'opacity-100 ') +
+										'mt-2 flex items-center justify-center gap-3 px-10 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50'
+									}
+								>
+									Subscribirme
+									<MoveRight color="#ffffff" size={22} />
+								</button>
+							</div>
+						)}
 						<p className="text-xs opacity-30">
 							Aun no puedes obtener el codigo fuente de este sitio
 						</p>

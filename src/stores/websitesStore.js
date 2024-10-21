@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { useClientsStore } from './clientsStore';
 import toast from 'react-hot-toast';
+import { useAuthStore } from './authStore';
 
 export const useWebsitesStore = create((set) => ({
 	websites: [],
@@ -126,7 +127,12 @@ export const useWebsitesStore = create((set) => ({
 			console.error('Error fetching website subscription', fetchError);
 		}
 	},
-	payWebsite: async ({ fetchData, fetchError, website_subscription_id, website_price }) => {
+	payWebsite: async ({
+		fetchData,
+		fetchError,
+		website_subscription_id,
+		website_price,
+	}) => {
 		try {
 			const website = await fetchData(`/api/stripe_checkout`, {
 				method: 'POST',
@@ -149,6 +155,47 @@ export const useWebsitesStore = create((set) => ({
 		} catch (error) {
 			toast.error('Error pagando el website');
 			console.error('Error paying website', fetchError);
+		}
+	},
+	cancelWebsiteSubscription: async ({
+		fetchData,
+		fetchError,
+		website_subscription_id,
+		strapi_subscription_Id,
+	}) => {
+		try {
+			const { user } = useAuthStore.getState();
+			const { getWebesitesByClientId } = useWebsitesStore.getState();
+
+			const website = await fetchData(`/api/cancel_subscription`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				body: JSON.stringify({
+					strapiSubscriptionId: strapi_subscription_Id,
+					subscriptionId: website_subscription_id,
+				}),
+			});
+
+			if (website.error) {
+				console.error('Error canceling website', website.error);
+				return;
+			}
+
+			getWebesitesByClientId({
+				fetchData,
+				fetchError,
+				clientId: user.id,
+			});
+
+			toast.success('Subscripción cancelada');
+
+			return website;
+		} catch (error) {
+			toast.error('Error cancelando el website');
+			console.error('Error canceling website', fetchError);
 		}
 	},
 	/* addWebsite: async ({ fetchData, fetchError, newWebsite, clientId }) => {

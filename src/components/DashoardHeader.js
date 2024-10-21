@@ -49,13 +49,13 @@ function DashoardHeader() {
 			</div>
 			<PopoverOptions
 				options={[
-					{
+					/* {
 						text: 'Editar perfil',
-						/* onClick: () => {
+						onClick: () => {
 							setClientIdToUpdate(client.id);
 							openUpdateClient();
-						}, */
-					},
+						},
+					}, */
 					{
 						text: 'Logout',
 						onClick: async () => {
