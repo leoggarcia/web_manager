@@ -108,19 +108,24 @@ function ClientWebsite({ website }) {
 							<div
 								className={`bg-${diseñoColor}-400 w-9 h-9 flex items-center mb-2 justify-center rounded-full drop-shadow-md`}
 							>
-								<div
-									className={`bg-${diseñoColor}-300 w-6 h-6 absolute rounded-full animate-ping`}
-								></div>
+								{websiteStatus == 1 && (
+									<div
+										className={`bg-${diseñoColor}-300 w-6 h-6 absolute rounded-full animate-ping`}
+									></div>
+								)}
 								<div
 									className={`bg-${diseñoColor}-300 w-5 h-5 rounded-full`}
 								></div>
 							</div>
 							<p className="text-base font-semibold">Diseño</p>
-							<p className="text-sm font-normal">En proceso</p>
+							<p className="text-sm font-normal">{websiteStatus == 1 ? "En proceso" : websiteStatus > 1 ? "Completado" : "No empezado"}</p>
 						</div>
 						{/* LINEA DISEÑO */}
 						<div
-							className={`mt-[14px] ml-[-64px] h-2 rounded-lg animate-pulse bg-gradient-to-r from-${diseñoColor}-400 to-${desarrolloColor}-400`}
+							className={
+								(websiteStatus == 1 && 'animate-pulse') +
+								` mt-[14px] ml-[-64px] h-2 rounded-lg bg-gradient-to-r from-${diseñoColor}-400 to-${desarrolloColor}-400`
+							}
 							style={{
 								width: 'calc(20% + 128px)',
 							}}
@@ -130,7 +135,11 @@ function ClientWebsite({ website }) {
 							<div
 								className={`w-9 h-9 flex items-center mb-2 justify-center bg-${desarrolloColor}-400 rounded-full drop-shadow-md`}
 							>
-								{/* <div className="w-6 h-6 absolute  bg-indigo-400 rounded-full animate-ping"></div> */}
+								{websiteStatus == 2 && (
+									<div
+										className={`w-6 h-6 absolute  bg-${desarrolloColor}-400 rounded-full animate-ping`}
+									></div>
+								)}
 								<div
 									className={`w-5 h-5 bg-${desarrolloColor}-300 rounded-full`}
 								></div>
@@ -138,11 +147,14 @@ function ClientWebsite({ website }) {
 							<p className="text-base font-semibold">
 								Desarrollo
 							</p>
-							<p className="text-sm font-normal">No empezado</p>
+							<p className="text-sm font-normal">{websiteStatus == 2 ? "En proceso" : websiteStatus > 2 ? "Completado" : "No empezado"}</p>
 						</div>
 						{/* LINEA DESARROLLO */}
 						<div
-							className={`mt-[14px] ml-[-64px] h-2 rounded-lg bg-gradient-to-r from-${desarrolloColor}-400 to-${publicadoColor}-400`}
+							className={
+								(websiteStatus == 2 && 'animate-pulse') +
+								` mt-[14px] ml-[-64px] h-2 rounded-lg bg-gradient-to-r from-${desarrolloColor}-400 to-${publicadoColor}-400`
+							}
 							style={{
 								width: 'calc(20% + 128px)',
 							}}
@@ -152,7 +164,11 @@ function ClientWebsite({ website }) {
 							<div
 								className={`w-9 h-9 flex items-center mb-2 justify-center bg-${publicadoColor}-400 rounded-full drop-shadow-md`}
 							>
-								{/* <div className="w-6 h-6 absolute  bg-indigo-400 rounded-full animate-ping"></div> */}
+								{
+									websiteStatus == 3 && (
+										<div className={`w-6 h-6 absolute  bg-${publicadoColor}-400 rounded-full animate-ping`}></div>
+									)
+								}
 								<div
 									className={`w-5 h-5 bg-${publicadoColor}-300 rounded-full`}
 								></div>
@@ -167,11 +183,14 @@ function ClientWebsite({ website }) {
 							>
 								Publicado
 							</p>
-							<p className="text-sm font-normal">No empezado</p>
+							<p className="text-sm font-normal">{websiteStatus == 3 ? "En proceso" : websiteStatus > 3 ? "Completado" : "No empezado"}</p>
 						</div>
 						{/* LINEA PUBLICADO */}
 						<div
-							className={`mt-[14px] ml-[-64px] h-2 rounded-lg bg-gradient-to-r from-${publicadoColor}-400 to-${terminadoColor}-400`}
+							className={
+								(websiteStatus == 3 && 'animate-pulse') +
+								` mt-[14px] ml-[-64px] h-2 rounded-lg bg-gradient-to-r from-${publicadoColor}-400 to-${terminadoColor}-400`
+							}
 							style={{
 								width: 'calc(20% + 128px)',
 							}}
@@ -189,7 +208,7 @@ function ClientWebsite({ website }) {
 							<p className="text-base font-semibold">
 								Sitio terminado
 							</p>
-							<p className="text-sm font-normal">No empezado</p>
+							<p className="text-sm font-normal">{websiteStatus == 4 ? "En proceso" : websiteStatus > 4 ? "Completado" : "No empezado"}</p>
 						</div>
 					</div>
 					<div className="flex flex-col items-center">

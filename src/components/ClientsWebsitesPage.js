@@ -39,7 +39,7 @@ function ClientsWebsitesPage() {
 			<div className="flex flex-col items-center gap-5">
 				{loadingMyWebistes ? (
 					<div className="animate-pulse h-[400px] rounded-lg bg-gray-100"></div>
-				) : (!myWebsites || myWebsites?.length === 0 ) ? (
+				) : !myWebsites || myWebsites?.length === 0 ? (
 					<p>No hay websites</p>
 				) : (
 					myWebsites?.map((website) => {
@@ -49,6 +49,7 @@ function ClientsWebsitesPage() {
 					})
 				)}
 			</div>
+			<div className="bg-indigo-300 bg-green-300 bg-green-400 bg-gray-300 bg-gray-400 bg-gradient-to-r from-gray-400 to-gray-400 bg-gradient-to-r from-indigo-400 to-indigo-400 bg-gradient-to-r from-green-400 to-green-400"></div>
 		</div>
 	);
 }

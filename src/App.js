@@ -17,6 +17,7 @@ import ManagerWebsites from './components/ManagerWebsites';
 import ManagerClients from './components/ManagerClients';
 import DashoardHeader from './components/DashoardHeader';
 import ClientsWebsitesPage from './components/ClientsWebsitesPage';
+import SuccessPaymentPage from './components/SuccessPaymentPage';
 
 const PrivateRoute = ({ children }) => {
 	const { fetchData, isLoading, error } = useFetch();
@@ -55,7 +56,7 @@ function App() {
 		<Router>
 			<Routes>
 				<Route path="/login" element={<LoginPage />} />
-				<Route
+				{/* <Route
 					path="/manager"
 					element={
 						<PrivateRoute>
@@ -82,13 +83,22 @@ function App() {
 							</ManagerDashboardPage>
 						</PrivateRoute>
 					}
-				/>
+				/> */}
 				<Route
 					path="/client"
 					element={
 						<PrivateRoute>
 							<DashoardHeader />
 							<ClientsWebsitesPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/client/payment-success"
+					element={
+						<PrivateRoute>
+							<DashoardHeader />
+							<SuccessPaymentPage />
 						</PrivateRoute>
 					}
 				/>
