@@ -279,12 +279,13 @@ function ClientWebsite({ website }) {
 								</h3>
 								<Eye size={20} className="opacity-50" />
 							</div>
-							<h4 className="font-semibold text-3xl">
+							<h4 className="font-semibold text-3xl text-gray-300">
 								{/* 130 visitas */}
 								No hay datos
 							</h4>
 							<p className="text-xs opacity-50">
-								+30% que la semana pasada
+								{/* +30% que la semana pasada */}
+								No hay datos
 							</p>
 						</div>
 						<div className="bg-gray-100 rounded-xl p-10 mt-5 w-full">
@@ -294,7 +295,7 @@ function ClientWebsite({ website }) {
 								</h3>
 								<Users size={20} className="opacity-50" />
 							</div>
-							<h4 className="font-semibold text-3xl">
+							<h4 className="font-semibold text-3xl text-gray-300">
 								{/* Facebook */}
 								No hay datos
 							</h4>
@@ -313,7 +314,7 @@ function ClientWebsite({ website }) {
 									className="opacity-50"
 								/>
 							</div>
-							<h4 className="font-semibold text-3xl">
+							<h4 className="font-semibold text-3xl text-gray-300">
 								{/* Smartphone */}
 								No hay datos
 							</h4>
