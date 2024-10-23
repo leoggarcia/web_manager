@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { useClientsStore } from './clientsStore';
 import toast from 'react-hot-toast';
 import { useAuthStore } from './authStore';
 

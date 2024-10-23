@@ -55,8 +55,6 @@ export const useAuthStore = create((set) => ({
 	},
 	checkAuth: async ({ fetchData, fetchError }) => {
 		/* GET USER FROM THIS STORE */
-		const user = useAuthStore.getState().user;
-
 		try {
 			const userData = await fetchData('/api/users/me', {
 				method: 'GET',
